@@ -1,8 +1,45 @@
+HELP.md
+/target/
+!.mvn/wrapper/maven-wrapper.jar
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+# Log file
+*.log
+# Properties file
+*.properties
+target
+.DS_Stor
+
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+/build/
+
+### VS Code ###
+.vscode/
+### Java template
 # Compiled class file
 *.class
 
 # Log file
-*.log
+
 
 # BlueJ files
 *.ctxt
@@ -21,3 +58,9 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+.mvn/
+mvnw
+mvnw.cmd
+pom.xml
+

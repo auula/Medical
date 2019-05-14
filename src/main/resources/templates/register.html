@@ -1,0 +1,148 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎使用医疗系统</title>
+    <!-- 引入 easyhelper 样式表 -->
+    <link rel="stylesheet" th:href="@{/css/easyhelper.min.css}">
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/css/planeui.css}" />
+    <link rel="stylesheet" type="text/css"
+          th:href="@{/css/login.css}" />
+
+</head>
+<body>
+<!--[if lte IE 9]>
+<div class="pui-layout pui-browsehappy">
+    <a href="javascript:;" class="pui-close" onclick="document.body.removeChild(this.parentNode);"></a>
+    <p>您正在使用 <strong class="pui-text-yellow pui-text-xl">过时</strong> 的非现代浏览器，<strong class="pui-text-success pui-text-xl">91.23%</strong> 的人选择 <a href="http://browsehappy.com/" target="_blank" class="pui-text-green-400 pui-text-xl"><strong>升级浏览器</strong></a>，获得了更好、更安全的浏览体验！</p>
+</div>
+<![endif]-->
+<a name="top"></a>
+<div class="pui-layout pui-flexbox pui-flex-column login-layout">
+    <div class="pui-layout pui-flex login-main">
+        <div
+                class="pui-layout pui-layout-fixed pui-layout-fixed-1200 login-main-con">
+            <div class="login-panel">
+                <form class="pui-form login-form" method="post">
+                    <div class="pui-form-group">
+                        <h1 class="pui-text-white pui-text-normal">
+                            <i class="fa fa-user-plus fa-2x"></i> 用户注册
+                        </h1>
+                        <div role="username">
+                            <input type="text" id="account"
+                                   class="pui-unbordered" placeholder="用户名" /> <i
+                                class="fa fa-user pui-text-blue"></i>
+                        </div>
+                    </div>
+                    <div class="pui-form-group">
+                        <div role="password">
+                            <input type="password" id="password" maxlength="16"
+                                   class="pui-unbordered" placeholder="设置密码" /> <i
+                                class="fa fa-lock pui-text-blue"></i>
+                        </div>
+                    </div>
+                    <div class="pui-form-group">
+                        <div role="password">
+                            <input type="password" id="password2" maxlength="16"
+                                   class="pui-unbordered" placeholder="确定密码" /> <i
+                                class="fa fa-lock pui-text-blue"></i>
+                        </div>
+                    </div>
+                    <div class="pui-form-group">
+                        <div role="vcode">
+                            <input type="text" id="vcode" maxlength="4"
+                                   class="pui-unbordered" placeholder="验证码" /> <i
+                                class="fa fa-shield pui-text-blue"></i> <img
+                                th:src="@{/open/captcha/(time=${new java.util.Date().getTime()})}"
+                                id="vcode-img" />
+                        </div>
+                    </div>
+                    <div class="pui-form-group">
+                        <input type="button" name="submit" onclick="validation();"
+                               class="pui-btn pui-btn-default pui-bg-blue-800 pui-unbordered"
+                               value="注 册" /> <span><a href="/login"
+                                                      class="pui-text-white pui-text-xs">去登陆？</a></span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer
+            class="pui-layout pui-layout-fixed pui-layout-fixed-1200 login-footer">
+        <div class="copyright">
+            <p >
+                Copyright &copy; <span th:text="(${new java.util.Date().getYear()}+1900)"></span> <a href="#"
+                                                                                                     class="pui-link" title="" target="_blank">DingShuo</a> All
+                Rights Reserved.
+            </p>
+            <p>
+                <small class="pui-right">代码如诗。</small>
+            </p>
+        </div>
+    </footer>
+</div>
+
+
+<script th:src="@{/js/jquery-3.4.0.min.js}"></script>
+
+<script th:src="@{/js/planeui.js}"></script>
+
+<!-- 引入 easyhelper 脚本文件 -->
+<script th:src="@{/js/easyhelper.min.js}"></script>
+
+
+
+<script type="text/javascript">
+
+    /* 点击切换验证码 */
+    $("#vcode-img").click(function () {
+        console.log();
+        $("#vcode-img").attr("src",'/open/captcha?'+new Date().getTime());
+    });
+    /* 验证 */
+    function validation() {
+
+        if($('#password').val() == "" || $('#account').val() == ""){
+            Helper.ui.notice.warn({
+                title: '账号或者密码不能为空！'
+            });
+            return;
+        }
+        if($('#password').val() != $('#password2').val()){
+            Helper.ui.notice.warn({
+                title: "2次密码不一样!"
+            });
+            return;
+        }
+        if($('#vcode').val() == ""){
+            Helper.ui.notice.warn({
+                title: "验证码不能为空！"
+            });
+            return;
+        }
+        register();
+    }
+    function register() {
+        const data = {
+            account : $('#account').val(),
+            password : $('#password').val(),
+            vcode : $('#vcode').val(),
+        }
+        $.post("/open/reg", data, function(result) {
+            if(result.status == 2000){
+                Helper.ui.notice.success({
+                    title: result.message
+                });
+                // console.log(result.message);
+                // window.location.href = "/login";
+            }else{
+                Helper.ui.notice.warn({
+                    title: result.message
+                });
+
+            }
+        });
+    }
+</script>
+</body>
+</html>
