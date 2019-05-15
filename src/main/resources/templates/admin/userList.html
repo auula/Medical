@@ -27,7 +27,7 @@
 <div class="col-sm-12" style="margin-top: 50px;">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>会员审核</h5>
+            <h5>会员列表</h5>
         </div>
         <div class="ibox-content">
 
@@ -37,7 +37,8 @@
                     <th>会员ID</th>
                     <th>会员账号</th>
                     <th>会员状态</th>
-                    <th>审核操作</th>
+                    <th>账户余额(元/¥)</th>
+                    <th>删除操作</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -48,9 +49,9 @@
 
 
                     <td th:text="${user.getStatus()} == 0 ? '未审核' : '已通过'"></td>
-
+                    <td th:text="${user.getMoney()}"></td>
                     <td class="text-navy">
-                        <button type="button" class="btn btn-success " th:onclick="'audit(\''+${user.getUid()}+'\')'"><i class="fa fa-check"></i>通 过</button>
+                        <button type="button" class="btn btn-w-m btn-danger" th:onclick="'delUser(\''+${user.getUid()}+'\')'"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                     </td>
                 </tr>
 
@@ -92,11 +93,11 @@
         "hideMethod": "fadeOut"
     };
 
-    function audit(id) {
+    function delUser(id) {
         const data = {
             uid : id
         }
-        $.post("/admin/audit", data, function (result) {
+        $.post("/admin/del", data, function (result) {
             if (result.status == 2000) {
                 toastr.success(result.message);
                 setTimeout("refresh()","3000");
@@ -107,7 +108,7 @@
     }
 
     function refresh() {
-        window.location.href = "/admin/userAudit.html";
+        window.location.href = "/admin/userList.html";
     }
 
     $(document).ready(function () {

@@ -1,0 +1,174 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet">
+    <link th:href="@{/css/plugins/toastr/toastr.min.css}" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="col-sm-12" style="margin-top: 50px;">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>会员反馈记录</h5>
+
+        </div>
+        <div class="ibox-content">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>反馈ID</th>
+                    <th>留言内容</th>
+                    <th>反馈时间</th>
+                    <th>回复操作</th>
+                    <th>删除留言</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="m : ${msg}">
+                    <td th:text="${m.getMid()}"></td>
+                    <td th:text="${m.getMessage()}"></td>
+                    <td th:text="${m.getCreatetime()}"></td>
+                    <td class="text-navy">
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                                th:attr="data-target='#myModal'+${m.getMid()}"><i
+                                class="glyphicon glyphicon-envelope"></i>&nbsp;回复
+                        </button>
+                    </td>
+                    <td class="text-navy">
+                        <button type="button" class="btn btn-w-m btn-danger"
+                                th:onclick="'delMsg(\''+${m.getMid()}+'\')'"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除
+                        </button>
+                    </td>
+                </tr>
+
+                </tbody>
+            </table>
+
+            <div class="modal inmodal" th:attr="id='myModal'+${m.getMid()}" role="dialog" aria-hidden="true"
+                 th:each="m : ${msg}">
+                <div class="modal-dialog">
+                    <div class="modal-content animated fadeIn">
+                        <div class="modal-header">
+                            <h4 class="modal-title">回复ID为<span th:text="${m.getMid()}"></span>的留言</h4>
+                        </div>
+                        <div class="modal-body text-center">
+
+                            <textarea id="message" class="form-control" placeholder="请输入回复内容"
+                                      style="margin: 0px -8.39062px 0px 0px; height: 280px; width: 480px;"></textarea>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" th:onclick="'reply(\''+${m.getMid()}+'\')'">
+                                确定回复
+                            </button>
+                            <button type="button" class="btn btn-white" data-dismiss="modal">取消回复</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/content.js?v=1.0.0}"></script>
+
+
+<!-- 自定义js -->
+<script th:src="@{/js/plugins/iCheck/icheck.min.js}"></script>
+<!-- Toastr script -->
+<script th:src="@{/js/plugins/toastr/toastr.min.js}"></script>
+<!-- Peity -->
+<script th:src="@{/js/demo/peity-demo.js}"></script>
+<!-- Peity -->
+<script th:src="@{/js/plugins/peity/jquery.peity.min.js}"></script>
+<script>
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    function reply(id) {
+
+        if ($("#message").val() == "") {
+            toastr.info("回复内容不能为空～");
+            return;
+        }
+        const data = {
+            mid: id,
+            content:$("#message").val()
+        }
+        $.post("/admin/reply", data, function (result) {
+            if (result.status == 2000) {
+                toastr.success(result.message);
+                setTimeout("refresh()", "3000");
+            } else {
+                toastr.info(result.message);
+            }
+        });
+    }
+
+    function delMsg(id) {
+        const data = {
+            mid: id
+        }
+        $.post("/admin/delMsg", data, function (result) {
+            if (result.status == 2000) {
+                toastr.success(result.message);
+                setTimeout("refresh()", "3000");
+            } else {
+                toastr.info(result.message);
+            }
+        });
+    }
+
+    function refresh() {
+        window.location.href = "/admin/msgList.html";
+    }
+
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

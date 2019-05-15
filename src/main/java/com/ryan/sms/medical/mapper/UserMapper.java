@@ -14,7 +14,7 @@ public interface UserMapper {
     List<User> getAllAuditUser();
 
 
-    @Insert("insert into t_users(username,password) values(#{username}, #{password})")
+    @Insert("INSERT INTO t_users(username,password) VALUES(#{username}, #{password})")
     int insert(@Param("username")String username,@Param("password")String password);
 
 
@@ -24,9 +24,17 @@ public interface UserMapper {
     @Select("SELECT * FROM t_users WHERE username = #{username} AND password = #{password}")
     User login(@Param("username") String username,@Param("password") String password);
 
-    @Update("update t_users set password=#{password2} where username=#{username}")
+    @Update("UPDATE t_users SET password=#{password2} WHERE username=#{username}")
     void resetPwd(@Param("username") String username,@Param("password2")String password2);
 
-    @Update("update t_users set money=#{money} where username=#{username}")
+    @Update("UPDATE t_users SET money=#{money} WHERE username=#{username}")
     void topUp(@Param("username") String username,@Param("money")Integer money);
+
+
+    @Update("UPDATE t_users SET status=1 WHERE uid=#{uid}")
+    void audit(@Param("uid") Integer uid);
+
+
+    @Delete("DELETE FROM t_users WHERE uid=#{uid}")
+    void del(@Param("uid") Integer uid);
 }

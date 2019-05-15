@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="renderer" content="webkit">
 
-    <title>医疗用户中心</title>
+    <title>医疗管理中心</title>
 
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html"/>
@@ -31,7 +31,7 @@
                                 <span class="clear">
                                     <span class="block m-t-xs" style="font-size:20px;">
                                         <i class="fa fa-area-chart"></i>
-                                        <strong class="font-bold">医疗用户中心</strong>
+                                        <strong class="font-bold">医疗管理中心</strong>
                                     </span>
                                 </span>
                         </a>
@@ -43,7 +43,7 @@
                     </a>
                 </li>
 
-                <div class="logo-element">医疗用户中心
+                <div class="logo-element">医疗管理中心
                 </div>
                 </li>
 
@@ -58,11 +58,13 @@
                         </li>
                         <li><a class="J_menuItem" href="/admin/userList.html">会员列表</a>
                         </li>
+                        <li><a class="J_menuItem" href="/admin/billList.html">会员账单</a>
+                        </li>
                     </ul>
                     <a href="#"><i class="glyphicon glyphicon-user"></i> <span class="nav-label">业务中心</span></a>
                     <ul class="nav nav-second-level">
                         </li>
-                        <li><a class="J_menuItem" href="/user/update.html">申请报销</a>
+                        <li><a class="J_menuItem" href="/admin/msgList.html">留言管理</a>
                         </li>
                         <li><a class="J_menuItem" href="/user/reqList.html">报销记录</a>
                         </li>
@@ -86,7 +88,7 @@
                         </a>
                     </li>
                     <li class="dropdown">
-                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" th:text="${user.getUsername()}">
+                        <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#" th:text="${user}">
 
                         </a>
                         <ul class="dropdown-menu dropdown-alerts">

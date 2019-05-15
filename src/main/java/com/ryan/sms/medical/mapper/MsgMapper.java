@@ -2,10 +2,7 @@ package com.ryan.sms.medical.mapper;
 
 
 import com.ryan.sms.medical.pojo.Msg;
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -20,6 +17,12 @@ public interface MsgMapper {
     @Select("SELECT * FROM t_msg WHERE username = #{username}")
     List<Msg> getMsgs(@Param("username") String username);
 
+    @Select("SELECT * FROM t_msg")
+    List<Msg> getAllMsg();
+
     @Delete("DELETE FROM t_msg WHERE mid=#{mid}")
     void delete(@Param("mid") int mid);
+
+    @Update("UPDATE t_msg SET reply=#{reply} WHERE mid=#{mid}")
+    void reply(@Param("reply") String reply,@Param("mid")Integer mid);
 }

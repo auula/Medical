@@ -1,5 +1,6 @@
 package com.ryan.sms.medical.view;
 
+import com.ryan.sms.medical.mapper.BillMapper;
 import com.ryan.sms.medical.mapper.MsgMapper;
 import com.ryan.sms.medical.mapper.TRequestMapper;
 import com.ryan.sms.medical.mapper.UserMapper;
@@ -41,6 +42,9 @@ public class UserView {
     @Autowired
     TRequestMapper tRequestMapper;
 
+
+    @Autowired
+    BillMapper billMapper;
 
     //获取文件存储路径
     @Value("${filePath}")
@@ -200,6 +204,7 @@ public class UserView {
             return new JsonData().build(-2000, "充值发生错误!");
         }
         if (passsword.equals("admin")) {
+            billMapper.up(login_user,Integer.valueOf(money),new Date().toLocaleString());
             userMapper.topUp(login_user, new_money);
             return new JsonData().build(2000, String.format("充值成功～账号余额为: %d", new_money));
         } else {

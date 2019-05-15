@@ -27,7 +27,7 @@
 <div class="col-sm-12" style="margin-top: 50px;">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>会员审核</h5>
+            <h5>会员账单</h5>
         </div>
         <div class="ibox-content">
 
@@ -36,24 +36,23 @@
                 <tr>
                     <th>会员ID</th>
                     <th>会员账号</th>
-                    <th>会员状态</th>
-                    <th>审核操作</th>
+                    <th>余额(元/¥)</th>
+                    <th>消费时间</th>
+                    <th>消费类型</th>
+                    <th>删除记录</th>
                 </tr>
                 </thead>
                 <tbody>
-
-                <tr th:each="user : ${users}">
-                    <td th:text="${user.getUid()}"></td>
-                    <td th:text="${user.getUsername()}"></td>
-
-
-                    <td th:text="${user.getStatus()} == 0 ? '未审核' : '已通过'"></td>
-
+                <tr th:each="b : ${bill}">
+                    <td th:text="${b.getBid()}"></td>
+                    <td th:text="${b.getUsername()}"></td>
+                    <td th:text="${b.getMoney()}"></td>
+                    <td th:text="${b.getTime()}"></td>
+                    <td th:text="${b.getMoney() != 1 ? '充值' : '扣费'}"></td>
                     <td class="text-navy">
-                        <button type="button" class="btn btn-success " th:onclick="'audit(\''+${user.getUid()}+'\')'"><i class="fa fa-check"></i>通 过</button>
+                        <button type="button" class="btn btn-w-m btn-danger" th:onclick="'del(\''+${b.getBid()}+'\')'"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</button>
                     </td>
                 </tr>
-
                 </tbody>
             </table>
         </div>
@@ -92,11 +91,11 @@
         "hideMethod": "fadeOut"
     };
 
-    function audit(id) {
+    function del(id) {
         const data = {
-            uid : id
+            bid : id
         }
-        $.post("/admin/audit", data, function (result) {
+        $.post("/admin/delBill", data, function (result) {
             if (result.status == 2000) {
                 toastr.success(result.message);
                 setTimeout("refresh()","3000");
@@ -107,7 +106,7 @@
     }
 
     function refresh() {
-        window.location.href = "/admin/userAudit.html";
+        window.location.href = "/admin/billList.html";
     }
 
     $(document).ready(function () {
