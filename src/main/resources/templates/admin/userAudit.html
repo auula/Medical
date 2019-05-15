@@ -27,7 +27,7 @@
 <div class="col-sm-12" style="margin-top: 50px;">
     <div class="ibox float-e-margins">
         <div class="ibox-title">
-            <h5>留言记录</h5>
+            <h5>会员审核</h5>
 
         </div>
         <div class="ibox-content">
@@ -35,20 +35,21 @@
             <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th>ID</th>
-                    <th>留言内容</th>
-                    <th>回复内容</th>
-                    <th>留言时间</th>
-                    <th>留言操作</th>
+                    <th>会员ID</th>
+                    <th>会员账号</th>
+                    <th>会员状态</th>
+                    <th>审核操作</th>
                 </tr>
                 </thead>
                 <tbody>
 
-                <tr th:each="msg : ${msgs}">
-                    <td th:text="${msg.getMid()}"></td>
-                    <td th:text="${msg.getMessage()}"></td>
-                    <td th:text="${msg.getReply()} == null ? '等待回复' : ${msg.getReply()}"></td>
-                    <td th:text="${msg.getCreatetime()}"></td>
+                <tr th:each="user : ${users}">
+                    <td th:text="${user.getUid()}"></td>
+                    <td th:text="${user.getUsername()}"></td>
+
+
+                    <td th:text="${user.getStatus()} == 0 ? '未审核' : '已通过'"></td>
+
                     <td class="text-navy">
                         <button type="button" class="btn btn-w-m btn-danger" th:onclick="'toDelete(\''+${msg.getMid()}+'\')'">删除</button>
                     </td>

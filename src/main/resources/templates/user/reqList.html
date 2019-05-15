@@ -1,0 +1,87 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="col-sm-12" style="margin-top: 50px;">
+    <div class="ibox-title">
+        <h5>报销记录</h5>
+
+    </div>
+    <div class="ibox-content">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>报销ID</th>
+                <th>申请时间</th>
+                <th>申请状态</th>
+                <th>查看凭证</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="rl : ${reqList}">
+                <td th:text="${rl.getRid()}"></td>
+                <td th:text="${rl.getCreatetime()}"></td>
+
+
+                <td th:text="${rl.getStatus()} == 0 ? '未审核' : '已通过'"></td>
+                <td class="text-navy">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#myModal'+${rl.getRid()}" >
+                        查看
+                    </button>
+                </td>
+
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="modal inmodal" th:attr="id='myModal'+${rl.getRid()}"  role="dialog" aria-hidden="true" th:each="rl : ${reqList}">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <h4 class="modal-title">凭证照片</h4>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>以下是你上传的凭证照片</p>
+                        <img class="text-center" style="width: 280px;height: 280px" th:src="@{/user/pic/{uuid}(uuid=${rl.getPicuri()})}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/content.js?v=1.0.0}"></script>
+<script>
+
+</script>
+</body>
+
+</html>

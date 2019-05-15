@@ -9,6 +9,11 @@ public interface UserMapper {
     @Select("SELECT * FROM t_users")
     List<User> getAll();
 
+
+    @Select("SELECT * FROM t_users WHERE status = 0")
+    List<User> getAllAuditUser();
+
+
     @Insert("insert into t_users(username,password) values(#{username}, #{password})")
     int insert(@Param("username")String username,@Param("password")String password);
 

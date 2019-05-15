@@ -1,0 +1,62 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+    <title>医疗用户中心</title>
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{/css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="col-sm-12" style="margin-top: 50px;">
+    <div class="ibox-title">
+        <h5>个人资料</h5>
+    </div>
+    <div>
+        <div class="ibox-content no-padding">
+            <img alt="image" class="img-responsive" style="width: 100%;height: 380px;" src="http://diy.yymoban.com/UploadFiles/Example/2018/08/25/ijkb1535170125.jpg" >
+        </div>
+        <div class="ibox-content profile-content">
+            <h4><strong th:text="${user.getUsername()}"></strong></h4>
+            <p><i class="fa fa-map-marker"></i> 欢迎使用本系统</p>
+        </div>
+        <div class="user-button">
+            <div class="row">
+                <div class="col-sm-12">
+                    <button type="button" class="btn btn-primary btn-sm btn-block"><i class="fa fa-envelope"></i>账号余额
+                        <span th:text="${user.getMoney()}"></span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/plugins/metisMenu/jquery.metisMenu.js}"></script>
+<script th:src="@{/js/plugins/slimscroll/jquery.slimscroll.min.js}"></script>
+<script th:src="@{/js/plugins/layer/layer.min.js}"></script>
+
+<!-- 自定义js -->
+<script th:src="@{/js/hAdmin.js?v=4.1.0}"></script>
+<script type="text/javascript" th:src="@{/js/index.js}"></script>
+
+<!-- 第三方插件 -->
+<script th:src="@{/js/plugins/pace/pace.min.js}"></script>
+
+</body>
+
+</html>

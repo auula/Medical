@@ -101,17 +101,16 @@ public class UserView {
         } catch (Exception e) {
             e.printStackTrace();
             return new JsonData().build(-2000, "凭证上传失败～");
-
         }
     }
 
-    @GetMapping("/pic/{pic}")
-    public void getPic(@PathVariable String pic, HttpServletResponse response) {
-        if (pic == null) {
+    @GetMapping("/pic/{uuid}")
+    public void getPic(@PathVariable String uuid, HttpServletResponse response) {
+        if (uuid == null) {
             return;
         }
         //指定本地文件夹存储图片
-        String Filepath = "/Users/jdode/Documents/pic/" + pic;
+        String Filepath = "/Users/jdode/Documents/pic/" + uuid;
         FileInputStream fileInputStream = null;
         try {
             fileInputStream = new FileInputStream(new File(Filepath));
@@ -125,6 +124,38 @@ public class UserView {
 //            e.printStackTrace();
         }
     }
+
+
+    @GetMapping("/reqList.html")
+    public String toReqList(Model model){
+        String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
+        model.addAttribute("reqList",tRequestMapper.getOne(login_user));
+        return "user/reqList";
+    }
+
+    @GetMapping("/my.html")
+    public String toMy(Model md){
+        String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
+        User one = userMapper.getOne(login_user);
+        md.addAttribute("user",one);
+        return "user/my";
+    }
+
+
+    @GetMapping("/logout")
+    public void logOut(HttpServletResponse response) throws IOException {
+        request.getSession().removeAttribute("LOGIN_USER");
+        response.sendRedirect("/");
+    }
+
+    @GetMapping("/")
+    public String index(Model md){
+        String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
+        User one = userMapper.getOne(login_user);
+        md.addAttribute("user",one);
+        return "user/index";
+    }
+
 
 
     @ResponseBody
