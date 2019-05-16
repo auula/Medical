@@ -73,7 +73,7 @@
                         </div>
                         <div class="modal-body text-center">
 
-                            <textarea id="message" class="form-control" placeholder="请输入回复内容"
+                            <textarea th:attr="id='message'+${m.getMid()}" class="form-control" placeholder="请输入回复内容"
                                       style="margin: 0px -8.39062px 0px 0px; height: 280px; width: 480px;"></textarea>
                         </div>
                         <div class="modal-footer">
@@ -124,13 +124,13 @@
 
     function reply(id) {
 
-        if ($("#message").val() == "") {
+        if ($("#message"+id).val() == "") {
             toastr.info("回复内容不能为空～");
             return;
         }
         const data = {
             mid: id,
-            content:$("#message").val()
+            content:$("#message"+id).val()
         }
         $.post("/admin/reply", data, function (result) {
             if (result.status == 2000) {

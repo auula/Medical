@@ -1,0 +1,124 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{/css/plugins/iCheck/custom.css}" rel="stylesheet">
+    <link th:href="@{css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet">
+    <link th:href="@{/css/plugins/toastr/toastr.min.css}" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="col-sm-12" style="margin-top: 50px">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>发布健康动态</h5>
+        </div>
+        <div class="ibox-content">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">标题：</label>
+                    <div class="col-sm-5">
+
+                        <input type="text" id="title" placeholder="标题" class="form-control">
+
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label">内容：</label>
+                    <div class="col-sm-9">
+    <textarea id="content" class="form-control" placeholder="请输入内容"
+              style="margin: 0px -8.39062px 0px 0px; height: 444px; width: 470px;"></textarea>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button class="btn btn-sm btn-info" type="button" onclick="validation()">
+                            提 交
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery-3.4.0.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/content.js?v=1.0.0}"></script>
+
+
+<!-- 自定义js -->
+<script th:src="@{/js/plugins/iCheck/icheck.min.js}"></script>
+<!-- Toastr script -->
+<script th:src="@{/js/plugins/toastr/toastr.min.js}"></script>
+<script>
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    $(document).ready(function () {
+        $('.i-checks').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+
+
+    /*验证 */
+    function validation() {
+        if ($('#title').val() == "" || $('#content').val() == "") {
+            toastr.warning('内容不能为空!');
+            return;
+        }
+        post();
+    }
+
+    function post() {
+        const data = {
+            title: $('#title').val(),
+            content: $('#content').val()
+        }
+        $.post("/admin/pull", data, function (result) {
+            if (result.status == 2000) {
+                toastr.success(result.message)
+            } else {
+                toastr.info(result.message);
+            }
+        });
+    }
+</script>
+</body>
+
+</html>

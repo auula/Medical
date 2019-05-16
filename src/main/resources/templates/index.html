@@ -122,7 +122,7 @@
         $.post("/open/login", data, function(result) {
             if(result.status == 2000){
                 console.log(result.message);
-                window.location.href='/user';
+                window.location.href= result.result.path;
             }else{
                 Helper.ui.notice.warn({
                     title: result.message,

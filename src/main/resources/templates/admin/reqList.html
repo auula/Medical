@@ -1,0 +1,128 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="renderer" content="webkit">
+
+
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+
+    <!--[if lt IE 9]>
+    <meta http-equiv="refresh" content="0;ie.html"/>
+    <![endif]-->
+    <link rel="shortcut icon" href="favicon.ico">
+    <link th:href="@{/css/bootstrap.min.css?v=3.3.6}" rel="stylesheet">
+    <link th:href="@{/css/font-awesome.min.css?v=4.4.0}" rel="stylesheet">
+    <link th:href="@{css/animate.css}" rel="stylesheet">
+    <link th:href="@{/css/style.css?v=4.1.0}" rel="stylesheet">
+    <link th:href="@{/css/plugins/toastr/toastr.min.css}" rel="stylesheet">
+</head>
+
+
+<body>
+
+<div class="col-sm-12" style="margin-top: 50px;">
+    <div class="ibox-title">
+        <h5>申请记录</h5>
+
+    </div>
+    <div class="ibox-content">
+        <table class="table table-hover">
+            <thead>
+            <tr>
+                <th>请求ID</th>
+                <th>申请时间</th>
+                <th>申请账号</th>
+                <th>查看凭证</th>
+                <th>审核操作</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="req : ${reqs}">
+                <td th:text="${req.getRid()}"></td>
+                <td th:text="${req.getCreatetime()}"></td>
+
+
+                <td th:text="${req.getUsername()}"></td>
+                <td class="text-navy">
+                    <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="data-target='#myModal'+${req.getRid()}" >
+                        查看
+                    </button>
+                </td>
+                <td class="text-navy">
+                    <button type="button" class="btn btn-success" th:onclick="'action(\''+${req.getRid()}+'\')'" >
+                        通过
+                    </button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+
+        <div class="modal inmodal" th:attr="id='myModal'+${rl.getRid()}"  role="dialog" aria-hidden="true" th:each="rl : ${reqs}">
+            <div class="modal-dialog">
+                <div class="modal-content animated fadeIn">
+                    <div class="modal-header">
+                        <h4 class="modal-title">凭证照片</h4>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>以下是你上传的凭证照片</p>
+                        <img class="text-center" style="width: 280px;height: 280px" th:src="@{/admin/pic/{uuid}(uuid=${rl.getPicuri()})}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-white" data-dismiss="modal">关闭</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- 全局js -->
+<script th:src="@{/js/jquery.min.js?v=2.1.4}"></script>
+<script th:src="@{/js/bootstrap.min.js?v=3.3.6}"></script>
+<script th:src="@{/js/content.js?v=1.0.0}"></script>
+<!-- Toastr script -->
+<script th:src="@{/js/plugins/toastr/toastr.min.js}"></script>
+<script>
+
+    toastr.options = {
+        "closeButton": true,
+        "debug": false,
+        "progressBar": true,
+        "positionClass": "toast-top-right",
+        "onclick": null,
+        "showDuration": "400",
+        "hideDuration": "1000",
+        "timeOut": "7000",
+        "extendedTimeOut": "1000",
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut"
+    };
+
+    function action(id) {
+        const data = {
+            rid : id
+        }
+        $.post("/admin/action", data, function (result) {
+            if (result.status == 2000) {
+                toastr.success(result.message);
+                setTimeout("refresh()","3000");
+            } else {
+                toastr.info(result.message);
+            }
+        });
+    }
+
+    function refresh() {
+        window.location.href = "/admin/reqList.html";
+    }
+</script>
+</body>
+
+</html>

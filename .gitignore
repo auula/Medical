@@ -19,7 +19,7 @@ HELP.md
 # Log file
 *.log
 # Properties file
-*.properties
+#*.properties
 target
 .DS_Stor
 

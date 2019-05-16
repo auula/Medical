@@ -1,11 +1,9 @@
 package com.ryan.sms.medical.view;
 
-import com.ryan.sms.medical.mapper.BillMapper;
-import com.ryan.sms.medical.mapper.MsgMapper;
-import com.ryan.sms.medical.mapper.TRequestMapper;
-import com.ryan.sms.medical.mapper.UserMapper;
+import com.ryan.sms.medical.mapper.*;
 import com.ryan.sms.medical.pojo.Msg;
 import com.ryan.sms.medical.pojo.User;
+import com.ryan.sms.medical.pojo.news;
 import com.ryan.sms.medical.utils.JsonData;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,13 +44,16 @@ public class UserView {
     @Autowired
     BillMapper billMapper;
 
+    @Autowired
+    NewsMapper newsMapper;
     //获取文件存储路径
     @Value("${filePath}")
     private String filePath;
 
     @GetMapping("/msgList.html")
     public String toMegList(Model md) {
-        List<Msg> admin = msgMapper.getMsgs("admin");
+        String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
+        List<Msg> admin = msgMapper.getMsgs(login_user);
         md.addAttribute("msgs", admin);
         return "user/msgList";
     }
@@ -69,7 +70,9 @@ public class UserView {
     }
 
     @GetMapping("/news.html")
-    public String toNews() {
+    public String toNews(Model md) {
+        List<news> all = newsMapper.getAll();
+        md.addAttribute("news",all);
         return "public/news";
     }
 
@@ -114,7 +117,7 @@ public class UserView {
             return;
         }
         //指定本地文件夹存储图片
-        String Filepath = "/Users/jdode/Documents/pic/" + uuid;
+        String Filepath = filePath + uuid;
         FileInputStream fileInputStream = null;
         try {
             fileInputStream = new FileInputStream(new File(Filepath));

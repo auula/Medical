@@ -82,12 +82,16 @@ public class OpenView {
                     JsonUtil.outJson(response, new JsonData().build(-2000, "账号或者密码错误！"));
                 } else {
                     request.getSession().setAttribute("LOGIN_USER",username);
-                    JsonUtil.outJson(response, new JsonData().build(2000, "登陆成功～"));
+                    JsonUtil.outJson(response, new JsonData().build(2000, "登陆成功～").put("path","/user/"));
                 }
                 break;
             case 2:
-                if (userMapper.login(username, password) == null) {
+                if (!username.equals("admin")&&password.equals("admin")) {
                     JsonUtil.outJson(response, new JsonData().build(-2000, "账号或者密码错误！"));
+                }else {
+                    request.getSession().setAttribute("LOGIN_USER",username);
+                    request.getSession().setAttribute("USER_TYPE",type_id);
+                    JsonUtil.outJson(response, new JsonData().build(2000, "登陆成功～").put("path","/admin/"));
                 }
                 break;
             default:
