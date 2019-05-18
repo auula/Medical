@@ -52,7 +52,11 @@
                     <div class="col-sm-offset-3 col-sm-8">
                         <button class="btn btn-sm btn-info" onclick="validation()" type="button">确定充值</button>
                     </div>
+                    <div class="col-sm-offset-3 col-sm-8">
+                        <button class="btn btn-success" onclick="refund()" type="button">申请退保</button>
+                    </div>
                 </div>
+
             </form>
         </div>
     </div>
@@ -97,6 +101,17 @@
             return;
         }
         topup();
+    }
+    
+    
+    function refund() {
+        $.post("/user/refund",null, function(result) {
+            if(result.status == 2000){
+                toastr.success(result.message);
+            }else{
+                toastr.info(result.message);
+            }
+        });
     }
     function topup() {
         const data = {

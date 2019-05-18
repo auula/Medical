@@ -34,6 +34,9 @@ public interface UserMapper {
     @Update("UPDATE t_users SET status=1 WHERE uid=#{uid}")
     void audit(@Param("uid") Integer uid);
 
+    @Update("UPDATE t_users SET money=0 WHERE username=#{username}")
+    void down(@Param("username") String username);
+
 
     @Delete("DELETE FROM t_users WHERE uid=#{uid}")
     void del(@Param("uid") Integer uid);

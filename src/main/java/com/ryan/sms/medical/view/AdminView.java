@@ -1,10 +1,7 @@
 package com.ryan.sms.medical.view;
 
 import com.ryan.sms.medical.mapper.*;
-import com.ryan.sms.medical.pojo.Bill;
-import com.ryan.sms.medical.pojo.Msg;
-import com.ryan.sms.medical.pojo.TRequest;
-import com.ryan.sms.medical.pojo.User;
+import com.ryan.sms.medical.pojo.*;
 import com.ryan.sms.medical.utils.JsonData;
 import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,6 +44,9 @@ public class AdminView {
     @Autowired
     HttpServletRequest request;
 
+    @Autowired
+    RefundMapper refundMapper;
+
     //获取文件存储路径
     @Value("${filePath}")
     private String filePath;
@@ -86,6 +86,13 @@ public class AdminView {
         List<Bill> all = billMapper.getAll();
         md.addAttribute("bill",all);
         return "admin/billList";
+    }
+
+    @GetMapping("/refundList.html")
+    public String refund(Model md){
+        List<refund> all = refundMapper.getAll();
+        md.addAttribute("rs", all);
+        return "admin/refundList";
     }
 
     @GetMapping("/userList.html")
@@ -141,6 +148,16 @@ public class AdminView {
         }
         msgMapper.delete(mid);
         return new JsonData().build(2000,"操作成功～留言已被删除!");
+    }
+    @ResponseBody
+    @PostMapping("/refund")
+    public JsonData refund(@RequestParam Integer id){
+        if (id == null) {
+            return new JsonData().build(-2000,"操作失败!！！！");
+        }
+
+        refundMapper.action(id);
+        return new JsonData().build(2000,"操作成功～!");
     }
     @ResponseBody
     @PostMapping("/pull")

@@ -46,6 +46,10 @@ public class UserView {
 
     @Autowired
     NewsMapper newsMapper;
+
+    @Autowired
+    RefundMapper refundMapper;
+
     //获取文件存储路径
     @Value("${filePath}")
     private String filePath;
@@ -72,7 +76,7 @@ public class UserView {
     @GetMapping("/news.html")
     public String toNews(Model md) {
         List<news> all = newsMapper.getAll();
-        md.addAttribute("news",all);
+        md.addAttribute("news", all);
         return "public/news";
     }
 
@@ -134,18 +138,32 @@ public class UserView {
 
 
     @GetMapping("/reqList.html")
-    public String toReqList(Model model){
+    public String toReqList(Model model) {
         String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
-        model.addAttribute("reqList",tRequestMapper.getOne(login_user));
+        model.addAttribute("reqList", tRequestMapper.getOne(login_user));
         return "user/reqList";
     }
 
     @GetMapping("/my.html")
-    public String toMy(Model md){
+    public String toMy(Model md) {
         String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
         User one = userMapper.getOne(login_user);
-        md.addAttribute("user",one);
+        md.addAttribute("user", one);
         return "user/my";
+    }
+
+
+    @ResponseBody
+    @PostMapping("/refund")
+    public JsonData refund() {
+        String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
+        int insert = refundMapper.insert(login_user, new Date().toLocaleString());
+        if (insert > 0) {
+            return new JsonData().build(2000, "申请退保成功~等待管理员审核~");
+        } else {
+            return new JsonData().build(-2000,"退保失败！！！");
+        }
+
     }
 
 
@@ -156,13 +174,12 @@ public class UserView {
     }
 
     @GetMapping("/")
-    public String index(Model md){
+    public String index(Model md) {
         String login_user = (String) request.getSession().getAttribute("LOGIN_USER");
         User one = userMapper.getOne(login_user);
-        md.addAttribute("user",one);
+        md.addAttribute("user", one);
         return "user/index";
     }
-
 
 
     @ResponseBody
@@ -207,7 +224,7 @@ public class UserView {
             return new JsonData().build(-2000, "充值发生错误!");
         }
         if (passsword.equals("admin")) {
-            billMapper.up(login_user,Integer.valueOf(money),new Date().toLocaleString());
+            billMapper.up(login_user, Integer.valueOf(money), new Date().toLocaleString());
             userMapper.topUp(login_user, new_money);
             return new JsonData().build(2000, String.format("充值成功～账号余额为: %d", new_money));
         } else {
